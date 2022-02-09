@@ -53,17 +53,17 @@ function initApp() {
 }
 
 // NFT FUNCTIONS
-async function getNFTs() {
+async function getNFTs(chain, ownerAddress, contractAddress) {
+  const options = { chain, ownerAddress };
+  let polygonNFTs = {};
 
-  const options = {
-    chain: "mumbai",
-    address: "0x15a7cd34d6df4b5291b4e2490fdc1c773de679bf",
-    // by contract
-    token_address: "0x44a3486708129982ec51f635dd32eb6d0e7cb87e"
-  };
-  // const polygonNFTs = await Moralis.Web3API.account.getNFTs(options);
-  // BY CONTRACT
-  const polygonNFTs = await Moralis.Web3API.account.getNFTsForContract(options);
+  if (contractAddress) { // If requesting nfts by contract ...
+    options.token_address = contractAddress;
+    polygonNFTs = await Moralis.Web3API.account.getNFTsForContract(options);
+  } else { // Else get all nfts from owner...
+    polygonNFTs = await Moralis.Web3API.account.getNFTs(options);
+  }
+
   console.log(JSON.stringify(polygonNFTs));
 }
 
@@ -117,7 +117,9 @@ async function sendNFT() {
 document.getElementById("btn_login").onclick = login;
 document.getElementById("btn_logout").onclick = logOut;
 document.getElementById("btn_send_nft").onclick = sendNFT;
-document.getElementById("btn_fetch_nfts").onclick = getNFTs;
+// Slate and tell nfts...
+// document.getElementById("btn_fetch_nfts").onclick = getNFTs("mumbai", "0x15a7cd34d6df4b5291b4e2490fdc1c773de679bf", "0x44a3486708129982ec51f635dd32eb6d0e7cb87e");
+document.getElementById("btn_fetch_nfts").onclick = getNFTs("eth", "0x5BDFe858fd8e8E7b6104B703Af1B35086e840FCb");
 
 /** Useful Resources  */
 

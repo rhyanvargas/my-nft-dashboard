@@ -1,0 +1,38 @@
+body {
+  text-align: center;
+  background-color: #04001a;
+}
+#image-preview {
+  display: none;
+}
+#btn_logout {
+  display: none;
+}
+#app {
+  display: none;
+  margin-top: 10px;
+  height: auto;
+  background-color: white;
+  padding: 20px;
+  border-radius: 20px;
+  color: #424242;
+}
+#user-name {
+  display: none;
+}
+.form_element {
+  margin-top: 20px;
+}
+.title {
+  color: #fff;
+  margin-top: 10px;
+}
+#success_message {
+  background-color: #c4ffc4;
+  border: 1px solid #0fcf0f;
+  border-radius: 4px;
+  display: none;
+}
+img {
+  padding: 20px 0;
+}

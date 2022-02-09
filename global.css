@@ -2,6 +2,13 @@ body {
   text-align: center;
   background-color: #04001a;
 }
+span {
+  font-size: small;
+  font-weight: bold;
+}
+button {
+  margin: 10px 0;
+}
 #image-preview {
   display: none;
 }

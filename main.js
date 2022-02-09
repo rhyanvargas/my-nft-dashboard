@@ -34,8 +34,8 @@ async function logOut() {
 
 // START APP
 function initApp() {
-  document.querySelector("#user-name").innerHTML = `<p>Connected User: ${user.get('ethAddress')}</p>`;
-  document.querySelector("#user-name").style.display = "block";
+  document.querySelector("#user-name").innerHTML = `<span class="text-uppercase">Connected User: </span><span >${user.get('ethAddress')}</span>`;
+  document.querySelector("#user-name").style.cssText += 'display:block; ';
   document.querySelector("#app").style.display = "block";
   document.querySelector("#btn_logout").style.display = "block";
   document.querySelector("#btn_login").style.display = "none";
@@ -53,21 +53,31 @@ function initApp() {
 }
 
 // NFT FUNCTIONS
-async function getNFTs(chain, ownerAddress, contractAddress) {
+async function getNFTids(contractAddress, chain = null) {
+  const options = { address: contractAddress };
+
+  if (chain !== null) { options.chain = chain };
+
+  const NFTs = await Moralis.Web3API.token.getAllTokenIds(options);
+  console.log(JSON.stringify(NFTs));
+}
+
+async function getNFTs(chain, ownerAddress, contractAddress = null) {
   const options = { chain, ownerAddress };
   let polygonNFTs = {};
 
-  if (contractAddress) { // If requesting nfts by contract ...
+  if (contractAddress === null) {
+    polygonNFTs = await Moralis.Web3API.account.getNFTs(options);
+  } else {
     options.token_address = contractAddress;
     polygonNFTs = await Moralis.Web3API.account.getNFTsForContract(options);
-  } else { // Else get all nfts from owner...
-    polygonNFTs = await Moralis.Web3API.account.getNFTs(options);
   }
 
   console.log(JSON.stringify(polygonNFTs));
 }
 
-// function minNFT() {}
+
+// TODO: function minNFT() {}
 
 async function sendNFT() {
   // https://docs.moralis.io/moralis-server/sending-assets#transferring-erc721-tokens-non-fungible
@@ -113,15 +123,27 @@ async function sendNFT() {
   // }, 5000)
 }
 
+// ADD BUTTON EVENTS
+let btnNftIds = document.getElementById("btn_fetch_nft_ids")
+let btnNfts = document.getElementById("btn_fetch_nfts")
+let btnLogin = document.getElementById("btn_login")
+let btnLogout = document.getElementById("btn_logout")
+let btnSendNft = document.getElementById("btn_send_nft")
+btnLogin.onclick = login;
+btnLogout.onclick = logOut;
+btnSendNft.onclick = sendNFT;
 
-document.getElementById("btn_login").onclick = login;
-document.getElementById("btn_logout").onclick = logOut;
-document.getElementById("btn_send_nft").onclick = sendNFT;
-// Slate and tell nfts...
-// document.getElementById("btn_fetch_nfts").onclick = getNFTs("mumbai", "0x15a7cd34d6df4b5291b4e2490fdc1c773de679bf", "0x44a3486708129982ec51f635dd32eb6d0e7cb87e");
-document.getElementById("btn_fetch_nfts").onclick = getNFTs("eth", "0x5BDFe858fd8e8E7b6104B703Af1B35086e840FCb");
+btnNfts.addEventListener('click', function () {
+  // ( chain, ownerAddress, contractAddress? )
+  getNFTs("mumbai", "0x15a7cd34d6df4b5291b4e2490fdc1c773de679bf", "0x44a3486708129982ec51f635dd32eb6d0e7cb87e");
+  // getNFTs("mumbai", "0x5BDFe858fd8e8E7b6104B703Af1B35086e840FCb");
+});
+btnNftIds.addEventListener('click', function () {
+  // ( contractAddress, chain? )
+  getNFTids("0x44a3486708129982ec51f635dd32eb6d0e7cb87e", "mumbai");
 
-/** Useful Resources  */
+});
+
 
 // https://docs.moralis.io/moralis-server/users/crypto-login
 // https://docs.moralis.io/moralis-server/getting-started/quick-start#user

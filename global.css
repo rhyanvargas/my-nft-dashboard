@@ -9,14 +9,19 @@ span {
 button {
   margin: 10px 0;
 }
-#image-preview {
-  display: none;
+img {
+  padding: 20px 0;
 }
-#btn_logout {
+/* INITIALLY HIDE ELEMENTS  */
+#image-preview,
+#result_message,
+#btn_logout,
+#app,
+#user-name,
+#success_message{
   display: none;
 }
 #app {
-  display: none;
   margin-top: 10px;
   height: auto;
   background-color: white;
@@ -24,8 +29,10 @@ button {
   border-radius: 20px;
   color: #424242;
 }
-#user-name {
-  display: none;
+#success_message {
+  background-color: #c4ffc4;
+  border: 1px solid #0fcf0f;
+  border-radius: 4px;
 }
 .form_element {
   margin-top: 20px;
@@ -33,13 +40,4 @@ button {
 .title {
   color: #fff;
   margin-top: 10px;
-}
-#success_message {
-  background-color: #c4ffc4;
-  border: 1px solid #0fcf0f;
-  border-radius: 4px;
-  display: none;
-}
-img {
-  padding: 20px 0;
 }

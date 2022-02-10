@@ -53,43 +53,60 @@ function initApp() {
 }
 
 // NFT FUNCTIONS
-async function getNFTids(contractAddress, chain = null) {
-  const options = { address: contractAddress };
+async function getNFTidsByContract(contractAddress, chain) {
+  const options = { address: contractAddress, chain };
+  const tokenIds = [];
+  const nftResults = await Moralis.Web3API.token.getAllTokenIds(options);
 
-  if (chain !== null) { options.chain = chain };
+  // grab token Ids...
+  nftResults && nftResults.result.map((nft) => {
+    tokenIds.push(
+      {
+        "token_address": nft.token_address,
+        "token_id": nft.token_id,
+        "contract_type": nft.contract_type,
+        "token_uri": nft.token_uri,
+        "metadata": nft.metadata,
+        "synced_at": nft.synced_at,
+        "amount": nft.amount,
+        "name": nft.name,
+        "symbol": nft.symbol
+      });
+  })
 
-  const NFTs = await Moralis.Web3API.token.getAllTokenIds(options);
-  console.log(JSON.stringify(NFTs));
+  console.log(JSON.stringify(tokenIds));
+
+  return tokenIds;
 }
 
-async function getNFTs(chain, ownerAddress, contractAddress = null) {
-  const options = { chain, ownerAddress };
-  let polygonNFTs = {};
-
-  if (contractAddress === null) {
-    polygonNFTs = await Moralis.Web3API.account.getNFTs(options);
-  } else {
-    options.token_address = contractAddress;
-    polygonNFTs = await Moralis.Web3API.account.getNFTsForContract(options);
-  }
+async function getMyNfts(chain, ownerAddress) {
+  const options = { chain, address: ownerAddress };
+  let polygonNFTs = await Moralis.Web3API.account.getNFTs(options);
 
   console.log(JSON.stringify(polygonNFTs));
 }
 
+async function minNFT() {
+  // TODO: https://youtu.be/WdQHnb_5m5Q?t=687
+}
 
-// TODO: function minNFT() {}
-
-async function sendNFT() {
+async function sendNFT(receiver, contractAddress, tokenId) {
   // https://docs.moralis.io/moralis-server/sending-assets#transferring-erc721-tokens-non-fungible
-  // sending a token with token id = 1
   const options = {
     type: "erc721",
-    receiver: "0xB129304Eb6dF88F3BAedd91Af016540e93850384",
-    contractAddress: "0x44A3486708129982EC51f635dD32EB6D0e7CB87E.",
-    tokenId: 1
+    receiver,
+    contractAddress,
+    tokenId
   }
-  let transaction = await Moralis.transfer(options)
 
+  let transaction = await Moralis.transfer(options)
+  const result = await transaction.wait()
+
+  if (result) console.log(result)
+
+  return results;
+
+  // UPLOAD IMAGE + CONVERT METADATA + LAZYMINT
   // const input = document.querySelector('#input_image');
   // let data = input.files[0]
   // const imageFile = new Moralis.File(data.name, data)
@@ -135,12 +152,12 @@ btnSendNft.onclick = sendNFT;
 
 btnNfts.addEventListener('click', function () {
   // ( chain, ownerAddress, contractAddress? )
-  getNFTs("mumbai", "0x15a7cd34d6df4b5291b4e2490fdc1c773de679bf", "0x44a3486708129982ec51f635dd32eb6d0e7cb87e");
+  getMyNfts("mumbai", "0x15a7cd34d6df4b5291b4e2490fdc1c773de679bf", "0x44a3486708129982ec51f635dd32eb6d0e7cb87e");
   // getNFTs("mumbai", "0x5BDFe858fd8e8E7b6104B703Af1B35086e840FCb");
 });
 btnNftIds.addEventListener('click', function () {
   // ( contractAddress, chain? )
-  getNFTids("0x44a3486708129982ec51f635dd32eb6d0e7cb87e", "mumbai");
+  getNFTidsByContract("0x44a3486708129982ec51f635dd32eb6d0e7cb87e", "mumbai");
 
 });
 

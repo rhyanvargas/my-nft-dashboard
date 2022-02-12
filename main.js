@@ -86,6 +86,12 @@ async function getMyNfts(chain, ownerAddress) {
   console.log(JSON.stringify(polygonNFTs));
 }
 
+// 1. Upload NFT metadata to IPFS
+async function upload() {
+
+}
+
+// 2. Mint
 async function minNFT() {
   // TODO: https://youtu.be/WdQHnb_5m5Q?t=687
 }
@@ -105,40 +111,10 @@ async function sendNFT(receiver, contractAddress, tokenId) {
   if (result) console.log(result)
 
   return results;
-
-  // UPLOAD IMAGE + CONVERT METADATA + LAZYMINT
-  // const input = document.querySelector('#input_image');
-  // let data = input.files[0]
-  // const imageFile = new Moralis.File(data.name, data)
-  // await imageFile.saveIPFS();
-  // let imageHash = imageFile.hash();
-
-  // let metadata = {
-  //   name: document.querySelector('#input_name').value,
-  //   description: document.querySelector('#input_description').value,
-  //   image: "/ipfs/" + imageHash
-  // }
-  // console.log(metadata);
-  // const jsonFile = new Moralis.File("metadata.json", { base64: btoa(JSON.stringify(metadata)) });
-  // await jsonFile.saveIPFS();
-
-  // let metadataHash = jsonFile.hash();
-  // console.log(jsonFile.ipfs())
-  // let res = await Moralis.Plugins.rarible.lazyMint({
-  //   chain: 'rinkeby',
-  //   userAddress: user.get('ethAddress'),
-  //   tokenType: 'ERC721',
-  //   tokenUri: 'ipfs://' + metadataHash,
-  //   royaltiesAmount: 5, // 0.05% royalty. Optional
-  // })
-  // console.log(res);
-  // document.querySelector('#success_message').innerHTML =
-  //   `NFT minted. <a href="https://rinkeby.rarible.com/token/${res.data.result.tokenAddress}:${res.data.result.tokenId}">View NFT`;
-  // document.querySelector('#success_message').style.display = "block";
-  // setTimeout(() => {
-  //   document.querySelector('#success_message').style.display = "none";
-  // }, 5000)
 }
+
+
+
 
 // ADD BUTTON EVENTS
 let btnNftIds = document.getElementById("btn_fetch_nft_ids")

@@ -69,6 +69,16 @@
 					</div>
 					<div class="form_element">
 						<input
+							required
+							class="form-control"
+							type="text"
+							id="input_name"
+							name="name"
+							placeholder="Name of this nft..."
+						/>
+					</div>
+					<div class="form_element">
+						<input
 							class="form-control"
 							type="text"
 							id="input_description"
@@ -85,11 +95,13 @@
 							accept="image/png, image/jpeg, image/gif"
 							required
 						/>
-						<img id="image-preview" src="#" alt="image preview" />
+						<div class="image_wrapper">
+							<img id="image-preview" src="#" alt="image preview" />
+						</div>
 					</div>
 					<div class="form_element">
-						<button class="btn btn-primary btn-lg btn-block" id="btn_send_nft">
-							Send NFT
+						<button class="btn btn-primary btn-lg btn-block" id="btn_mint_nft">
+							Mint & Send NFT
 						</button>
 					</div>
 					<div class="input-group mb-3" id="result_message"></div>

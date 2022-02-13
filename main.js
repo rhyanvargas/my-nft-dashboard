@@ -3,7 +3,19 @@ const serverUrl = "https://b21nuxnwzwy4.usemoralis.com:2053/server";
 const appId = "6ZMbqgNZpA94FiW5EFqBDsoWQ0fCaEtISedrnJnc";
 Moralis.start({ serverUrl, appId });
 let user = Moralis.User.current();
-
+// DOM Elements
+let btnNftIds = document.getElementById("btn_fetch_nft_ids")
+let btnNfts = document.getElementById("btn_fetch_nfts")
+let btnLogin = document.getElementById("btn_login")
+let btnLogout = document.getElementById("btn_logout")
+let btnMintNFT = document.getElementById("btn_mint_nft")
+let appContainer = document.querySelector("#app");
+let userName = document.querySelector("#user-name");
+let nameInput = document.querySelector('#input_name');
+let descriptionInput = document.querySelector('#input_description');
+let imageInput = document.querySelector('#input_image');
+let imageElement = document.querySelector('#image-preview');
+let toAddressInput = document.querySelector('#input_address');
 
 // AUTHENTICATE - LOGOUT / LOGIN
 async function login() {
@@ -26,22 +38,19 @@ async function login() {
 
 async function logOut() {
   await Moralis.User.logOut();
-  document.querySelector("#app").style.display = "none";
-  document.querySelector("#btn_logout").style.display = "none";
-  document.querySelector("#btn_login").style.display = "block";
+  appContainer.style.display = "none";
+  btnLogout.style.display = "none";
+  btnLogin.style.display = "block";
   console.log("logged out");
 }
 
 // START APP
 function initApp() {
-  document.querySelector("#user-name").innerHTML = `<span class="text-uppercase">Connected User: </span><span >${user.get('ethAddress')}</span>`;
-  document.querySelector("#user-name").style.cssText += 'display:block; ';
-  document.querySelector("#app").style.display = "block";
-  document.querySelector("#btn_logout").style.display = "block";
-  document.querySelector("#btn_login").style.display = "none";
-  // HANDLE IMAGE UPLOAD
-  const imageInput = document.querySelector('#input_image');
-  const imageElement = document.querySelector('#image-preview');
+  btnLogin.style.display = "none";
+  btnLogout.style.display = "block";
+  userName.innerHTML = `<span class="text-uppercase">Connected User: </span><span >${user.get('ethAddress')}</span>`;
+  userName.style.cssText += 'display:block; ';
+  appContainer.style.display = "block";
   // Preview image when uploaded...
   imageInput.onchange = (e) => {
     let [file] = imageInput.files;
@@ -87,54 +96,93 @@ async function getMyNfts(chain, ownerAddress) {
 }
 
 // 1. Upload NFT metadata to IPFS
-async function upload() {
-
+async function getImageIPFS() {
+  const data = await imageInput.files[0];
+  const imageFile = new Moralis.File(nameInput.value, data);
+  await imageFile.saveIPFS();
+  console.log('IMAGE UPLOAD: SUCCESS...: ', imageFile.ipfs())
+  return imageFile.ipfs();
 }
 
-// 2. Mint
-async function minNFT() {
-  // TODO: https://youtu.be/WdQHnb_5m5Q?t=687
-}
-
-async function sendNFT(receiver, contractAddress, tokenId) {
-  // https://docs.moralis.io/moralis-server/sending-assets#transferring-erc721-tokens-non-fungible
-  const options = {
-    type: "erc721",
-    receiver,
-    contractAddress,
-    tokenId
+// 2. Upload metadata to IPFS
+async function getMetadata(imageURL) {
+  const metadata = {
+    "name": nameInput.value,
+    "imageUrl": imageURL,
+    "description": descriptionInput.value,
   }
+  const metadataFile = new Moralis.File("NFTmetadata.json", { base64: btoa(JSON.stringify(metadata)) })
+  await metadataFile.saveIPFS();
+  console.log('METADATA UPLOAD: SUCCESS...', metadataFile.ipfs())
+  return metadataFile.ipfs();
+}
 
-  let transaction = await Moralis.transfer(options)
-  const result = await transaction.wait()
-
-  if (result) console.log(result)
-
-  return results;
+// 3. Call image and metadata upload functions....
+async function getTokenURI() {
+  const image = await getImageIPFS();
+  const uri = await getMetadata(image);
+  console.log("TOKEN URI RECEIVED: ", uri);
+  return uri
 }
 
 
+// 4. Mint
+async function mintNFT(_to) {
+  const contractAddress = '0x44a3486708129982ec51f635dd32eb6d0e7cb87e';
+  const ABI = [{ "inputs": [], "name": "lastId", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "to", "type": "address" }, { "internalType": "string", "name": "uri", "type": "string" }], "name": "mint", "outputs": [], "stateMutability": "nonpayable", "type": "function" }];
+  const tokenURI = await getTokenURI();
+  const sendOptions = {
+    contractAddress: contractAddress,
+    functionName: "mint",
+    abi: ABI,
+    params: {
+      to: _to,
+      uri: tokenURI,
+    },
+  };
+
+  const transaction = await Moralis.executeFunction(sendOptions);
+  console.log('TRANSACTION HASH(PENDING...): ', transaction.hash)
+  // --> "0x39af55979f5b690fdce14eb23f91dfb0357cb1a27f387656e197636e597b5b7c"
+
+  // Wait until the transaction is confirmed
+  await transaction.wait();
+  console.log("TRANSACTION CONFIRMED! NFT SENT TO ADDRESS: ", _to);
+
+  // Read new value
+}
+
+// 5. send nft
+// async function sendNFT(receiver, contractAddress, tokenId) {
+//   // https://docs.moralis.io/moralis-server/sending-assets#transferring-erc721-tokens-non-fungible
+//   const options = {
+//     type: "erc721",
+//     receiver,
+//     contractAddress,
+//     tokenId
+//   }
+
+//   let transaction = await Moralis.transfer(options)
+//   const result = await transaction.wait()
+
+//   if (result) console.log(result)
+//   return results;
+// }
 
 
 // ADD BUTTON EVENTS
-let btnNftIds = document.getElementById("btn_fetch_nft_ids")
-let btnNfts = document.getElementById("btn_fetch_nfts")
-let btnLogin = document.getElementById("btn_login")
-let btnLogout = document.getElementById("btn_logout")
-let btnSendNft = document.getElementById("btn_send_nft")
 btnLogin.onclick = login;
 btnLogout.onclick = logOut;
-btnSendNft.onclick = sendNFT;
 
+btnMintNFT.addEventListener('click', function () {
+  mintNFT(toAddressInput.value);
+})
 btnNfts.addEventListener('click', function () {
-  // ( chain, ownerAddress, contractAddress? )
   getMyNfts("mumbai", "0x15a7cd34d6df4b5291b4e2490fdc1c773de679bf", "0x44a3486708129982ec51f635dd32eb6d0e7cb87e");
   // getNFTs("mumbai", "0x5BDFe858fd8e8E7b6104B703Af1B35086e840FCb");
 });
 btnNftIds.addEventListener('click', function () {
-  // ( contractAddress, chain? )
   getNFTidsByContract("0x44a3486708129982ec51f635dd32eb6d0e7cb87e", "mumbai");
-
 });
 
 

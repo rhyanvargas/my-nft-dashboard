@@ -6,8 +6,9 @@ span {
   font-size: small;
   font-weight: bold;
 }
-button {
-  margin: 10px 0;
+button,
+.btn {
+
 }
 img {
   width: 100%;
@@ -18,7 +19,7 @@ img {
 #result_message,
 #btn_logout,
 #app,
-#user-name,
+#user_address_container,
 #success_message{
   display: none;
 }
@@ -35,6 +36,17 @@ img {
   border: 1px solid #0fcf0f;
   border-radius: 4px;
 }
+.user_address_container {
+  white-space: nowrap; 
+  width: auto; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  /* border: 1px solid #000000; */
+}
+.user_address_container:hover {
+  overflow: visible;
+  cursor: copy;
+}
 .form_element {
   margin-top: 20px;
 }
@@ -46,4 +58,21 @@ img {
   padding: 20px;
   display: flex;
   flex: 1;
+}
+.nav-tabs {
+  padding-bottom: 15px;
+  border-bottom: 1px solid #3b82f680;
+  justify-content: space-evenly;
+}
+.nav-tabs .nav-link {
+  padding: 12px 20px;
+}
+.nav-tabs .nav-link.active,
+.nav-tabs .nav-link.active:hover{
+  background-color: #1268f133;
+  border-radius: 5px;
+  /* border-bottom: none; */
+}
+.tab-content {
+  padding: 20px 0;
 }

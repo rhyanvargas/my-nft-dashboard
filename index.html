@@ -19,95 +19,226 @@
 			href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.css"
 			rel="stylesheet"
 		/>
+		<!-- Custom Style Overrides -->
 		<link href="./global.css" rel="stylesheet" />
 	</head>
 
 	<body>
 		<div class="container">
+			<!-- HEADER: LOGIN/LOGOUT BUTTONS -->
 			<div class="row">
-				<div class="title"><h1>NFT Minter</h1></div>
-				<div class="col-md-6 offset-md-3 d-flex justify-content-center">
-					<button class="btn btn-primary btn-lg" id="btn_login">
+				<div
+					class="col-12 d-flex flex-wrap justify-content-between align-items-center flex-wrap"
+				>
+					<div class="title"><h1>NFT Minter</h1></div>
+					<div class="d-flex justify-content-center align-items-center w-50">
+						<div
+							class="user_address_container me-3"
+							id="user_address_container"
+							style="display: block"
+						>
+							<span class="text-uppercase"
+								>user:
+								<span id="user_address"
+									><span>0x5bdfe858fd8e8e7b6104b703af1b35086e840fcb</span></span
+								></span
+							>
+						</div>
+						<button
+							class="btn btn-secondary btn-md px-3 w-auto"
+							id="btn_logout"
+							style="display: block"
+						>
+							Logout
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- MINT NFT CONTENT -->
+			<div class="row">
+				<div id="login_container" class="col-10 offset-1 pt-5">
+					<h1>Connect your metamask wallet...</h1>
+					<button id="btn_login" class="btn btn-primary btn-lg">
 						Connect Wallet
 					</button>
-					<button class="btn btn-secondary btn-lg" id="btn_logout">
-						Disconnect Wallet
-					</button>
 				</div>
-				<div class="py-3" id="user-name"></div>
-			</div>
-			<div class="row">
-				<div id="app" class="col-md-6 offset-md-3">
+				<div id="app" class="col-10 offset-1">
 					<div id="success_message"></div>
 					<div class="row">
 						<div class="col-md-12">
-							<button
-								class="btn btn-primary btn-lg btn-block"
-								id="btn_fetch_nfts"
-							>
-								Get My NFTS
-							</button>
+							<!-- Nav tabs -->
+							<ul class="nav nav-tabs" id="myTab" role="tablist">
+								<li class="nav-item" role="presentation">
+									<a
+										class="nav-link active"
+										id="my_nfts-tab"
+										data-mdb-toggle="tab"
+										href="#my_nfts"
+										role="tab"
+										aria-controls="home"
+										aria-selected="true"
+										>🖼 My NFTs</a
+									>
+								</li>
+								<li class="nav-item" role="presentation">
+									<a
+										class="nav-link"
+										id="mint-tab"
+										data-mdb-toggle="tab"
+										href="#mint"
+										role="tab"
+										aria-controls="mint"
+										aria-selected="false"
+										>🛠 Mint NFT</a
+									>
+								</li>
+								<li class="nav-item" role="presentation">
+									<a
+										class="nav-link"
+										id="transactions-tab"
+										data-mdb-toggle="tab"
+										href="#transactions"
+										role="tab"
+										aria-controls="transactions"
+										aria-selected="false"
+									>
+										📤 Transactions</a
+									>
+								</li>
+								<li class="nav-item" role="presentation">
+									<a
+										class="nav-link"
+										id="settings-tab"
+										data-mdb-toggle="tab"
+										href="#settings"
+										role="tab"
+										aria-controls="settings"
+										aria-selected="false"
+									>
+										⚙️ Settings</a
+									>
+								</li>
+							</ul>
+							<!-- Tab Content -->
+							<div class="tab-content">
+								<!-- MY NFTS -->
+								<div
+									class="tab-pane active"
+									id="my_nfts"
+									role="tabpanel"
+									aria-labelledby="my_nfts-tab"
+								>
+									<h2>MY NFTs</h2>
+									<div class="row">
+										<!-- Buttons -->
+										<div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+											<button
+												class="btn btn-primary btn-lg btn-block"
+												id="btn_fetch_nfts"
+											>
+												Get My NFTS
+											</button>
+											<button
+												class="btn btn-primary btn-lg btn-block"
+												id="btn_fetch_nft_ids"
+											>
+												Get Token ID's by Contract
+											</button>
+										</div>
+									</div>
+								</div>
+								<div
+									class="tab-pane"
+									id="mint"
+									role="tabpanel"
+									aria-labelledby="mint-tab"
+								>
+									<h2>Send an NFT</h2>
+									<div class="row">
+										<div class="col-12 col-md-8 offset-md-2">
+											<!-- MINTING FORM -->
+											<div class="form_element">
+												<input
+													required
+													class="form-control"
+													type="text"
+													id="input_address"
+													name="address"
+													placeholder="Recipient Wallet Address..."
+												/>
+											</div>
+											<div class="form_element">
+												<input
+													required
+													class="form-control"
+													type="text"
+													id="input_name"
+													name="name"
+													placeholder="Name of this nft..."
+												/>
+											</div>
+											<div class="form_element">
+												<input
+													class="form-control"
+													type="text"
+													id="input_description"
+													name="description"
+													placeholder="Description of NFT"
+												/>
+											</div>
+											<div class="form_element">
+												<input
+													class="form-control"
+													type="file"
+													id="input_image"
+													name="image"
+													accept="image/png, image/jpeg, image/gif"
+													required
+												/>
+												<div class="image_wrapper">
+													<img id="image-preview" src="#" alt="image preview" />
+												</div>
+											</div>
+											<div class="form_element">
+												<button
+													class="btn btn-primary btn-lg btn-block"
+													id="btn_mint_nft"
+												>
+													Mint & Send NFT
+												</button>
+											</div>
+											<div class="input-group mb-3" id="result_message"></div>
+										</div>
+									</div>
+								</div>
+								<div
+									class="tab-pane"
+									id="transactions"
+									role="tabpanel"
+									aria-labelledby="transactions-tab"
+								>
+									<h2>View NFT Transactions</h2>
+								</div>
+								<div
+									class="tab-pane"
+									id="settings"
+									role="tabpanel"
+									aria-labelledby="settings-tab"
+								>
+									<h2>Update Settings</h2>
+								</div>
+							</div>
 						</div>
-						<div class="col-md-12">
-							<button
-								class="btn btn-primary btn-lg btn-block"
-								id="btn_fetch_nft_ids"
-							>
-								Get Token ID's by Contract
-							</button>
-						</div>
 					</div>
-					<div class="form_element">
-						<input
-							required
-							class="form-control"
-							type="text"
-							id="input_address"
-							name="address"
-							placeholder="Recipient Wallet Address..."
-						/>
-					</div>
-					<div class="form_element">
-						<input
-							required
-							class="form-control"
-							type="text"
-							id="input_name"
-							name="name"
-							placeholder="Name of this nft..."
-						/>
-					</div>
-					<div class="form_element">
-						<input
-							class="form-control"
-							type="text"
-							id="input_description"
-							name="description"
-							placeholder="Description of NFT"
-						/>
-					</div>
-					<div class="form_element">
-						<input
-							class="form-control"
-							type="file"
-							id="input_image"
-							name="image"
-							accept="image/png, image/jpeg, image/gif"
-							required
-						/>
-						<div class="image_wrapper">
-							<img id="image-preview" src="#" alt="image preview" />
-						</div>
-					</div>
-					<div class="form_element">
-						<button class="btn btn-primary btn-lg btn-block" id="btn_mint_nft">
-							Mint & Send NFT
-						</button>
-					</div>
-					<div class="input-group mb-3" id="result_message"></div>
 				</div>
 			</div>
 		</div>
+		<!-- MDB -->
+		<script
+			type="text/javascript"
+			src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.js"
+		></script>
 		<script type="text/javascript" src="main.js"></script>
 	</body>
 </html>

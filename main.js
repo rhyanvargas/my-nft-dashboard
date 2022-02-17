@@ -3,14 +3,17 @@ const serverUrl = "https://b21nuxnwzwy4.usemoralis.com:2053/server";
 const appId = "6ZMbqgNZpA94FiW5EFqBDsoWQ0fCaEtISedrnJnc";
 Moralis.start({ serverUrl, appId });
 let user = Moralis.User.current();
+
 // DOM Elements
 let btnNftIds = document.getElementById("btn_fetch_nft_ids")
 let btnNfts = document.getElementById("btn_fetch_nfts")
 let btnLogin = document.getElementById("btn_login")
+let loginContainer = document.getElementById("login_container")
 let btnLogout = document.getElementById("btn_logout")
 let btnMintNFT = document.getElementById("btn_mint_nft")
 let appContainer = document.querySelector("#app");
-let userName = document.querySelector("#user-name");
+let userAddressContainer = document.querySelector("#user_address_container");
+let userAddress = document.querySelector("#user_address");
 let nameInput = document.querySelector('#input_name');
 let descriptionInput = document.querySelector('#input_description');
 let imageInput = document.querySelector('#input_image');
@@ -21,6 +24,7 @@ let toAddressInput = document.querySelector('#input_address');
 async function login() {
   if (!user) {
     try {
+
       user = await Moralis.authenticate({ signingMessage: "Hello World!" })
       const account = await Moralis.account;
       console.log(account); // "0x...."
@@ -40,16 +44,17 @@ async function logOut() {
   await Moralis.User.logOut();
   appContainer.style.display = "none";
   btnLogout.style.display = "none";
-  btnLogin.style.display = "block";
+  userAddressContainer.style.display = "none";
+  loginContainer.style.display = "block";
   console.log("logged out");
 }
 
 // START APP
 function initApp() {
-  btnLogin.style.display = "none";
+  loginContainer.style.display = "none";
   btnLogout.style.display = "block";
-  userName.innerHTML = `<span class="text-uppercase">Connected User: </span><span >${user.get('ethAddress')}</span>`;
-  userName.style.cssText += 'display:block; ';
+  userAddressContainer.style.cssText += 'display:block; ';
+  userAddress.innerHTML = `<span >${user.get('ethAddress')}</span>`;
   appContainer.style.display = "block";
   // Preview image when uploaded...
   imageInput.onchange = (e) => {
@@ -148,8 +153,6 @@ async function mintNFT(_to) {
   // Wait until the transaction is confirmed
   await transaction.wait();
   console.log("TRANSACTION CONFIRMED! NFT SENT TO ADDRESS: ", _to);
-
-  // Read new value
 }
 
 // 5. send nft
@@ -168,6 +171,7 @@ async function mintNFT(_to) {
 //   if (result) console.log(result)
 //   return results;
 // }
+
 
 
 // ADD BUTTON EVENTS

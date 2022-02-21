@@ -1,6 +1,8 @@
+import { APP_ID, SERVER_URL } from './secret.js';
+
 /** Connect to Moralis server */
-const serverUrl = "https://b21nuxnwzwy4.usemoralis.com:2053/server";
-const appId = "6ZMbqgNZpA94FiW5EFqBDsoWQ0fCaEtISedrnJnc";
+const serverUrl = SERVER_URL;
+const appId = APP_ID;
 Moralis.start({ serverUrl, appId });
 let user = Moralis.User.current();
 
@@ -20,12 +22,12 @@ let imageInput = document.querySelector('#input_image');
 let imageElement = document.querySelector('#image-preview');
 let toAddressInput = document.querySelector('#input_address');
 
+
 // AUTHENTICATE - LOGOUT / LOGIN
 async function login() {
   if (!user) {
     try {
-
-      user = await Moralis.authenticate({ signingMessage: "Hello World!" })
+      user = await Moralis.authenticate({ signingMessage: "By signing this message, you agree to MY NFT DASHBOARD terms & services " })
       const account = await Moralis.account;
       console.log(account); // "0x...."
       await Moralis.enableWeb3();
@@ -47,6 +49,7 @@ async function logOut() {
   userAddressContainer.style.display = "none";
   loginContainer.style.display = "block";
   console.log("logged out");
+  location.reload();
 }
 
 // START APP

@@ -1,4 +1,4 @@
-import { APP_ID, SERVER_URL } from './secret.js';
+import { APP_ID, SERVER_URL, CONTRACT_ADDRESS } from './secret.js';
 
 /** Connect to Moralis server */
 const serverUrl = SERVER_URL;
@@ -136,7 +136,7 @@ async function getTokenURI() {
 
 // 4. Mint
 async function mintNFT(_to) {
-  const contractAddress = '0x44a3486708129982ec51f635dd32eb6d0e7cb87e';
+  const contractAddress = CONTRACT_ADDRESS;
   const ABI = [{ "inputs": [], "name": "lastId", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "to", "type": "address" }, { "internalType": "string", "name": "uri", "type": "string" }], "name": "mint", "outputs": [], "stateMutability": "nonpayable", "type": "function" }];
   const tokenURI = await getTokenURI();
   const sendOptions = {
@@ -151,30 +151,11 @@ async function mintNFT(_to) {
 
   const transaction = await Moralis.executeFunction(sendOptions);
   console.log('TRANSACTION HASH(PENDING...): ', transaction.hash)
-  // --> "0x39af55979f5b690fdce14eb23f91dfb0357cb1a27f387656e197636e597b5b7c"
 
   // Wait until the transaction is confirmed
   await transaction.wait();
   console.log("TRANSACTION CONFIRMED! NFT SENT TO ADDRESS: ", _to);
 }
-
-// 5. send nft
-// async function sendNFT(receiver, contractAddress, tokenId) {
-//   // https://docs.moralis.io/moralis-server/sending-assets#transferring-erc721-tokens-non-fungible
-//   const options = {
-//     type: "erc721",
-//     receiver,
-//     contractAddress,
-//     tokenId
-//   }
-
-//   let transaction = await Moralis.transfer(options)
-//   const result = await transaction.wait()
-
-//   if (result) console.log(result)
-//   return results;
-// }
-
 
 
 // ADD BUTTON EVENTS
@@ -185,18 +166,8 @@ btnMintNFT.addEventListener('click', function () {
   mintNFT(toAddressInput.value);
 })
 btnNfts.addEventListener('click', function () {
-  getMyNfts("mumbai", "0x15a7cd34d6df4b5291b4e2490fdc1c773de679bf", "0x44a3486708129982ec51f635dd32eb6d0e7cb87e");
-  // getNFTs("mumbai", "0x5BDFe858fd8e8E7b6104B703Af1B35086e840FCb");
+  getMyNfts("mumbai", user.get('ethaddress'), CONTRACT_ADDRESS);
 });
 btnNftIds.addEventListener('click', function () {
-  getNFTidsByContract("0x44a3486708129982ec51f635dd32eb6d0e7cb87e", "mumbai");
+  getNFTidsByContract(CONTRACT_ADDRESS, "mumbai");
 });
-
-
-// https://docs.moralis.io/moralis-server/users/crypto-login
-// https://docs.moralis.io/moralis-server/getting-started/quick-start#user
-// https://docs.moralis.io/moralis-server/users/crypto-login#metamask
-
-/** Moralis Forum */
-
-// https://forum.moralis.io/

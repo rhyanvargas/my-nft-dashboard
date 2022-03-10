@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<title>My Nft Dashboard</title>
-		<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+		<!-- <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script> -->
 		<script src="https://unpkg.com/moralis@1.3.0/dist/moralis.js"></script>
 		<!-- Font Awesome -->
 		<link
@@ -62,7 +62,6 @@
 					</button>
 				</div>
 				<div id="app" class="col-10 offset-1">
-					<div id="success_message"></div>
 					<div class="row">
 						<div class="col-md-12">
 							<!-- Nav tabs -->
@@ -70,25 +69,25 @@
 								<li class="nav-item" role="presentation">
 									<a
 										class="nav-link active"
-										id="my_nfts-tab"
-										data-mdb-toggle="tab"
-										href="#my_nfts"
-										role="tab"
-										aria-controls="home"
-										aria-selected="true"
-										>🖼 My NFTs</a
-									>
-								</li>
-								<li class="nav-item" role="presentation">
-									<a
-										class="nav-link"
 										id="mint-tab"
 										data-mdb-toggle="tab"
 										href="#mint"
 										role="tab"
 										aria-controls="mint"
-										aria-selected="false"
+										aria-selected="true"
 										>🛠 Mint NFT</a
+									>
+								</li>
+								<li class="nav-item" role="presentation">
+									<a
+										class="nav-link"
+										id="my_nfts-tab"
+										data-mdb-toggle="tab"
+										href="#my_nfts"
+										role="tab"
+										aria-controls="myNfts"
+										aria-selected="false"
+										>🖼 My NFTs</a
 									>
 								</li>
 								<li class="nav-item" role="presentation">
@@ -123,31 +122,6 @@
 								<!-- MY NFTS -->
 								<div
 									class="tab-pane active"
-									id="my_nfts"
-									role="tabpanel"
-									aria-labelledby="my_nfts-tab"
-								>
-									<h2>MY NFTs</h2>
-									<div class="row">
-										<!-- Buttons -->
-										<div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
-											<button
-												class="btn btn-primary btn-lg btn-block"
-												id="btn_fetch_nfts"
-											>
-												Get My NFTS
-											</button>
-											<button
-												class="btn btn-primary btn-lg btn-block"
-												id="btn_fetch_nft_ids"
-											>
-												Get Token ID's by Contract
-											</button>
-										</div>
-									</div>
-								</div>
-								<div
-									class="tab-pane"
 									id="mint"
 									role="tabpanel"
 									aria-labelledby="mint-tab"
@@ -207,7 +181,26 @@
 													Mint & Send NFT
 												</button>
 											</div>
-											<div class="input-group mb-3" id="result_message"></div>
+											<!-- <div class="input-group mb-3" id="result_message"></div> -->
+										</div>
+									</div>
+								</div>
+								<div
+									class="tab-pane"
+									id="my_nfts"
+									role="tabpanel"
+									aria-labelledby="my_nfts-tab"
+								>
+									<h2>MY NFTs</h2>
+									<div class="row">
+										<!-- Buttons -->
+										<div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+											<button
+												class="btn btn-primary btn-lg btn-block"
+												id="btn_fetch_nfts"
+											>
+												Reload Nfts
+											</button>
 										</div>
 									</div>
 								</div>
@@ -231,6 +224,7 @@
 						</div>
 					</div>
 				</div>
+				<div id="success_message" class="col-6 offset-3"> </div>
 			</div>
 		</div>
 		<!-- MDB -->

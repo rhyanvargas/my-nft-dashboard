@@ -1,78 +1,86 @@
 body {
-  text-align: center;
-  background-color: #04001a;
+	text-align: center;
+	background-color: #04001a;
 }
 span {
-  font-size: small;
-  font-weight: bold;
+	font-size: small;
+	font-weight: bold;
 }
 button,
 .btn {
-
+	overflow-wrap: normal;
 }
 img {
-  width: 100%;
-  height: auto;
+	width: 100%;
+	height: auto;
 }
 /* INITIALLY HIDE ELEMENTS  */
+#success_message,
 #image-preview,
 #result_message,
 #btn_logout,
 #app,
-#user_address_container,
-#success_message{
-  display: none;
+#user_address_container {
+	display: none;
+}
+#status-text {
+	padding: 10px 30px;
+	border: 1px solid #333;
 }
 #app {
-  margin-top: 10px;
-  height: auto;
-  background-color: white;
-  padding: 20px;
-  border-radius: 20px;
-  color: #424242;
+	margin-top: 10px;
+	height: auto;
+	background-color: white;
+	padding: 20px;
+	border-radius: 20px;
+	color: #424242;
 }
 #success_message {
-  background-color: #c4ffc4;
-  border: 1px solid #0fcf0f;
-  border-radius: 4px;
+	background-color: #fff;
+	border: none;
+	border-radius: 8px;
+	box-shadow: 1px 0 6px #fff;
+	margin-top: 20px;
+	padding: 20px 0px;
 }
 .user_address_container {
-  white-space: nowrap; 
-  width: auto; 
-  overflow: hidden;
-  text-overflow: ellipsis; 
-  /* border: 1px solid #000000; */
+	white-space: nowrap;
+	width: auto;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	/* border: 1px solid #000000; */
 }
 .user_address_container:hover {
-  overflow: visible;
-  cursor: copy;
+	overflow: visible;
+	cursor: copy;
 }
 .form_element {
-  margin-top: 20px;
+	margin-top: 20px;
 }
 .title {
-  color: #fff;
-  margin-top: 10px;
+	color: #fff;
+	margin-top: 10px;
 }
 .image_wrapper {
-  padding: 20px;
-  display: flex;
-  flex: 1;
+	display: flex;
+	flex: 1;
+	max-width: 130px;
+	margin: 20px auto;
 }
 .nav-tabs {
-  padding-bottom: 15px;
-  border-bottom: 1px solid #3b82f680;
-  justify-content: space-evenly;
+	padding-bottom: 15px;
+	border-bottom: 1px solid #3b82f680;
+	justify-content: space-evenly;
 }
 .nav-tabs .nav-link {
-  padding: 12px 20px;
+	padding: 12px 20px;
 }
 .nav-tabs .nav-link.active,
-.nav-tabs .nav-link.active:hover{
-  background-color: #1268f133;
-  border-radius: 5px;
-  /* border-bottom: none; */
+.nav-tabs .nav-link.active:hover {
+	background-color: #1268f133;
+	border-radius: 5px;
+	/* border-bottom: none; */
 }
 .tab-content {
-  padding: 20px 0;
+	padding: 20px 0;
 }

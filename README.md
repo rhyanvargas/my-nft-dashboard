@@ -1,2 +1,13 @@
-# my-nft-dashboard
-view your nfts , mint an nft,transfer your nfts and see your wallet ballance all in one easy dashboard
+# nft-dashboard
+
+Mint an nft that will also send to destination address.
+
+## Use Cases
+
+- Company wants to airdrop nfts to customers who buy other goods
+
+## Future features:
+
+- show nfts you own
+- show transactions from your wallet
+- show nft analytics (value over time)

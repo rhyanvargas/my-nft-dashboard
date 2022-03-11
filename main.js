@@ -243,7 +243,7 @@ async function mintNFT(_to) {
     }
 
     alert(msg);
-    window.reload()
+    window.location.reload();
   }
 
 

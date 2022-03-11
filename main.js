@@ -194,44 +194,58 @@ async function getTokenURI() {
 async function mintNFT(_to) {
   const isAddressValid = await isValidAddress(_to);
   console.log(`${imageInput.value} + ${isAddressValid}`);
-  if (isAddressValid &&
-    imageInput.value &&
-    nameInput.value &&
-    descriptionInput.value
-  ) {
-    // Disable button 
-    btnMintNFT.disabled = true;
-    const tokenURI = await getTokenURI();
-    const contractAddress = CONTRACT_ADDRESS;
-    const ABI = [{ "inputs": [], "name": "lastId", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "to", "type": "address" }, { "internalType": "string", "name": "uri", "type": "string" }], "name": "mint", "outputs": [], "stateMutability": "nonpayable", "type": "function" }];
-    const sendOptions = {
-      contractAddress: contractAddress,
-      functionName: "mint",
-      abi: ABI,
-      params: {
-        to: _to,
-        uri: tokenURI,
-      },
-    };
-    btnMintNFT.innerText = `...EXECUTING TRANSACTION...`;
-    const transaction = await Moralis.executeFunction(sendOptions);
-    // Wait until the transaction is confirmed
-    const result = await transaction.wait();
-    console.log('transaction finished: ', result);
-    statusText.style.display = 'block'
-    statusText.innerText = `3/3 TRANSACTION CONFIRMED! NFT SENT TO ADDRESS: ${_to}`;
-    clearForm();
-    btnMintNFT.disabled = false;
-    btnMintNFT.innerText = 'Mint & send nft'
-    setTimeout(() => {
-      statusText.style.display = 'none'
-    }, 5000);
-  } else {
-    alert('Please check that all fields are correct and try to mint again.');
-    toAddressInput.value = null
-    imageInput.value = null
-    imageElement.style.display = "none"
+  try {
+    if (isAddressValid &&
+      imageInput.value &&
+      nameInput.value &&
+      descriptionInput.value
+    ) {
+      // Disable button 
+      btnMintNFT.disabled = true;
+      const tokenURI = await getTokenURI();
+      const contractAddress = CONTRACT_ADDRESS;
+      const ABI = [{ "inputs": [], "name": "lastId", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "to", "type": "address" }, { "internalType": "string", "name": "uri", "type": "string" }], "name": "mint", "outputs": [], "stateMutability": "nonpayable", "type": "function" }];
+      const sendOptions = {
+        contractAddress: contractAddress,
+        functionName: "mint",
+        abi: ABI,
+        params: {
+          to: _to,
+          uri: tokenURI,
+        },
+      };
+      btnMintNFT.innerText = `...EXECUTING TRANSACTION...`;
+      const transaction = await Moralis.executeFunction(sendOptions);
+      // Wait until the transaction is confirmed
+      const result = await transaction.wait();
+      console.log('transaction finished: ', result);
+      statusText.style.display = 'block'
+      statusText.innerText = `3/3 TRANSACTION CONFIRMED! NFT SENT TO ADDRESS: ${_to}`;
+      clearForm();
+      btnMintNFT.disabled = false;
+      btnMintNFT.innerText = 'Mint & send nft'
+      setTimeout(() => {
+        statusText.style.display = 'none'
+      }, 5000);
+    } else {
+      alert('Please check that all fields are correct and try to mint again.');
+      toAddressInput.value = null
+      imageInput.value = null
+      imageElement.style.display = "none"
+    }
+
+  } catch (error) {
+    let msg = error.data.message;
+    console.log(JSON.stringify(error.data));
+    if (error.data.code === 3) {
+      // Un-authorized to mint with connected address
+      msg = `Please connect to wallet address that's authorized to mint NFT. Details: ${msg}`
+    }
+
+    alert(msg);
+    window.reload()
   }
+
 
 }
 

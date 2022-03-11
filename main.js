@@ -25,7 +25,7 @@ let imageElement = document.querySelector('#image-preview');
 let toAddressInput = document.querySelector('#input_address');
 let statusText = document.querySelector('#success_message');
 
-// AUTHENTICATE - LOGOUT / LOGIN
+// UTILITY FUNCTIONS - LOGOUT / LOGIN - Validations - Clear Form
 async function login() {
   if (!user) {
     try {
@@ -66,6 +66,14 @@ function isValidAddress(_toAddress) {
   console.log(`${ethers.utils.isAddress(formattedAddy)}, ${formattedAddy}`);
 
   return ethers.utils.isAddress(formattedAddy);
+}
+
+function clearForm() {
+  toAddressInput.value = null
+  nameInput.value = null;
+  descriptionInput.value = null;
+  imageInput.value = null;
+  imageElement.style.display = "none"
 }
 
 // START APP
@@ -153,7 +161,7 @@ async function getMetadata(imageURL) {
   if (imageURL) {
     const metadata = {
       "name": nameInput.value,
-      "imageUrl": imageURL,
+      "image": imageURL,
       "description": descriptionInput.value,
     }
     const metadataFile = new Moralis.File("NFTmetadata.json", { base64: btoa(JSON.stringify(metadata)) })
@@ -212,6 +220,7 @@ async function mintNFT(_to) {
     console.log('transaction finished: ', result);
     statusText.style.display = 'block'
     statusText.innerText = `3/3 TRANSACTION CONFIRMED! NFT SENT TO ADDRESS: ${_to}`;
+    clearForm();
     btnMintNFT.disabled = false;
     btnMintNFT.innerText = 'Mint & send nft'
     setTimeout(() => {
@@ -219,6 +228,7 @@ async function mintNFT(_to) {
     }, 5000);
   } else {
     alert('Please check that all fields are correct and try to mint again.');
+    toAddressInput.value = null
     imageInput.value = null
     imageElement.style.display = "none"
   }

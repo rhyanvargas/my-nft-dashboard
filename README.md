@@ -1,10 +1,10 @@
 # nft-dashboard
 
-Mint an nft that will also send to destination address.
+Mint an nft that will also send to destination address. Future features below!
 
 ## Use Cases
 
-- Company wants to airdrop nfts to customers who buy other goods
+- Company wants to send nfts to customers who buy other goods
 
 ## Future features:
 
